@@ -45,7 +45,7 @@ d[l] ? console.warn(p + " only loads once. Ignoring:", g)
      : d[l] = (f, ...n) => r.add(f) && u().then(() => d[l](f, ...n));
 
 })({
-key: "AIzaSyCRNLdJoO4TDB5lGjO7Ot0lx2KhgjF36zw", 
+key: "API_KEY", 
 v: "beta"
 });
 
