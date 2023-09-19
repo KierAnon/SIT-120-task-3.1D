@@ -47,7 +47,7 @@ const barValue = ref(`${props.stats[0].amount}px`)
 </template>
 
 
-<style>
+<style scoped>
 .card {
   border: 1px solid #e0e0e0;
   border-radius: 8px;
@@ -69,6 +69,11 @@ const barValue = ref(`${props.stats[0].amount}px`)
     display: flex;
     flex-direction: column;
     align-items: center;
+}
+
+img{
+  max-width: 280px;
+  max-height: 200px;
 }
 
 .bar {

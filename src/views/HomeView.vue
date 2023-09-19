@@ -5,23 +5,31 @@ import { state } from '../stateModule';
 
 toRef(state);
 
-
-
-const initalItems = [
+const initialItems = [
   {
     title: 'Driving',
-    description: 'The car is petrol powered and is an average 4 door sedan.',
+    description: 'Driving 1km in a petrol car',
     image: '/car.jpg',
     category: 'transportation',
     stats: [
       {
         name: "carbon",
-        amount: 280
-      },
+        type: 'g',
+        amount: 170
+      }     
+    ]
+  },
+  {
+    title: 'Flying',
+    description: 'Flying 1km in a plane',
+    image: '/flying.gif',
+    category: 'transportation',
+    stats: [
       {
-        name: "calories",
-        amount: 0
-      }      
+        name: "carbon",
+        type: 'g',
+        amount: 246
+      }     
     ]
   },
   {
@@ -33,11 +41,7 @@ const initalItems = [
       {
         name: "carbon",
         amount: 1
-      },
-      {
-        name: "calories",
-        amount: 50
-      }      
+      }    
     ]
   },
   {
@@ -48,43 +52,73 @@ const initalItems = [
     stats: [
       {
         name: "carbon",
-        amount: 30
-      },
+        type: 'g',
+        amount: 47
+      }     
+    ]
+  },
+  {
+    title: 'Bus',
+    description: 'Travelling 1km in a bus',
+    image: 'bus.jpg',
+    category: 'transportation',
+    stats: [
       {
-        name: "calories",
-        amount: 0
-      }      
+        name: "carbon",
+        type: 'g',
+        amount: 97
+      }    
     ]
   },
   {
     title: 'Eating a steak',
-    description: 'The steak was from a grass fed farm.',
+    description: '100 grams of beef',
     image: 'steak.jpg',
     category: 'food',
     stats: [
       {
         name: "carbon",
-        amount: 280
-      },
+        amount: 9900
+      }     
+    ]
+  },
+  {
+    title: 'Tofu',
+    description: '100 grams of tofu',
+    image: 'tofu.jpg',
+    category: 'food',
+    stats: [
       {
-        name: "calories",
-        amount: 500
-      }      
+        name: "carbon",
+        amount: 320
+      }    
     ]
   }
 ]
 
+const filterItems = (chosenFilter) => {
+  if(chosenFilter.target.value == 'all'){
+    items.value = initialItems;
+  }else{
+    const filteredItems = initialItems.filter((item) => item.category == chosenFilter.target.value);
+    items.value = filteredItems;
+  }
+  
+  
+}
 
-
-let items = ref(initalItems);
+let items = ref(initialItems);
+const category = ref('all');
 
 const sortItems = () => {
   items.value.sort((a, b) =>
-    a.stats.find(stat => stat.name === "carbon").amount - 
-    b.stats.find(stat => stat.name === "carbon").amount
+    b.stats.find(stat => stat.name === "carbon").amount - 
+    a.stats.find(stat => stat.name === "carbon").amount
   );
   console.log(items.value)
 }
+
+
 
 if(state.formData){
   console.log('output')
@@ -93,17 +127,12 @@ if(state.formData){
   console.log(state.formData.name)
   const newItem = {
     title: state.formData.name,
-    subtitle: 'blank',
     description: state.formData.description,
-    image: '#',
-    stats: [
-      {
-        name: 'carbon',
-        amount: 20
-      }
-    ]
+    category: state.formData.category,
+    image: state.formData.image,
+    stats: state.formData.stats
   }
-  initalItems.push(newItem);
+  initialItems.push(newItem);
 }
 
 </script>
@@ -111,14 +140,20 @@ if(state.formData){
 <template>
   <main class="home">
     <h1>Home</h1>
+    <div class="controls">
+      <div>
     <button class="button" @click="sortItems">Sort by carbon</button>
-    <label for="category">Choose a category:</label>
-    <select name="category" id="category">
-      <option value="all">All</option>
-      <option value="food">Food</option>
-      <option value="transportation">Transportation</option>
-      <option value="clothes">Clothes</option>
-    </select>
+    </div>
+    <div>
+      <label for="category">Choose a category:</label>
+      <select name="category" id="category" v-model="category" @change="filterItems($event)">
+        <option value="all">All</option>
+        <option value="food">Food</option>
+        <option value="transportation">Transportation</option>
+        <option value="clothes">Clothes</option>
+      </select>
+    </div>
+    </div>
 
     <div class="home-container">
     <Card class="card-item" v-for="(item, index) in items"
@@ -134,6 +169,52 @@ if(state.formData){
 </template>
 
 <style>
+.home {
+    padding: 20px;
+    width: 90%;
+    margin: 0 auto;
+}
+
+h1 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.button {
+    padding: 10px 20px;
+    font-size: 16px;
+    color: #fff;
+    background-color: #28a745;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin: 0 10px;
+}
+
+.button:hover {
+    background-color: #218838;
+}
+
+.controls{
+  display: flex;
+  justify-content: space-between;
+}
+
+label {
+    font-size: 16px;
+    color: #333;
+    display: block;
+    margin-bottom: 8px;
+}
+
+select {
+    padding: 8px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
 .home-container{
   display: flex;
   flex-grow: 1;
