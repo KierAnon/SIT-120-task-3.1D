@@ -1,12 +1,18 @@
 <script setup>
-import { ref } from 'vue';
+import { ref, toRef } from 'vue';
 import Card from '../components/Card.vue';
+import { state } from '../stateModule';
+
+toRef(state);
+
+
+
 const initalItems = [
   {
     title: 'Driving',
-    subtitle: 'Driving 1 km in a standard vehicle',
     description: 'The car is petrol powered and is an average 4 door sedan.',
     image: '/car.jpg',
+    category: 'transportation',
     stats: [
       {
         name: "carbon",
@@ -20,9 +26,9 @@ const initalItems = [
   },
   {
     title: 'Riding a bike',
-    subtitle: 'Riding 1 km on a bike',
     description: 'The bike is a standard road bike.',
     image: 'biking.webp',
+    category: 'transportation',
     stats: [
       {
         name: "carbon",
@@ -36,9 +42,9 @@ const initalItems = [
   },
   {
     title: 'Driving an EV',
-    subtitle: 'Driving 1 km in a standard vehicle',
     description: 'The electric vehicle is a Tesla Model 3.',
     image: 'ev.jpg',
+    category: 'transportation',
     stats: [
       {
         name: "carbon",
@@ -52,9 +58,9 @@ const initalItems = [
   },
   {
     title: 'Eating a steak',
-    subtitle: 'Eating a 250gram steak',
     description: 'The steak was from a grass fed farm.',
     image: 'steak.jpg',
+    category: 'food',
     stats: [
       {
         name: "carbon",
@@ -80,12 +86,39 @@ const sortItems = () => {
   console.log(items.value)
 }
 
+if(state.formData){
+  console.log('output')
+  console.log(state.name)
+  console.log(state.formData)
+  console.log(state.formData.name)
+  const newItem = {
+    title: state.formData.name,
+    subtitle: 'blank',
+    description: state.formData.description,
+    image: '#',
+    stats: [
+      {
+        name: 'carbon',
+        amount: 20
+      }
+    ]
+  }
+  initalItems.push(newItem);
+}
+
 </script>
 
 <template>
   <main class="home">
     <h1>Home</h1>
     <button class="button" @click="sortItems">Sort by carbon</button>
+    <label for="category">Choose a category:</label>
+    <select name="category" id="category">
+      <option value="all">All</option>
+      <option value="food">Food</option>
+      <option value="transportation">Transportation</option>
+      <option value="clothes">Clothes</option>
+    </select>
 
     <div class="home-container">
     <Card class="card-item" v-for="(item, index) in items"

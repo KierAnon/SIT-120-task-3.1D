@@ -1,15 +1,12 @@
 <script setup>
 import { ref } from 'vue';
+import Graph from './Graph.vue';
 
 const props = defineProps({
     title: {
       type: String,
       required: true
-    },
-    subtitle: {
-      type: String,
-      default: ''
-    },
+    },    
     description: {
       type: String,
       default: ''
@@ -30,15 +27,18 @@ const barValue = ref(`${props.stats[0].amount}px`)
 <div class="card">
     <div class="card-header">
       <h2>{{ title }}</h2>
-      <h5>{{ subtitle }}</h5>
     </div>
     <div class="card-body">
         <img :src="image" />
       <p>{{ description }}</p>
       <div class="bar-chart-container">
         <div class="bar-container">
-            <p>{{ stats[0].name }}</p>
-            <div class="bar" :style="{width: barValue}" ></div>
+          <Graph 
+            :bars="stats"
+          />
+            <!-- <p>{{ stats[0].name }}</p> -->
+            <!-- <div class="bar" :style="{width: barValue}" ></div> -->
+           
 
         </div>
       </div>
@@ -67,6 +67,7 @@ const barValue = ref(`${props.stats[0].amount}px`)
 
 .bar-container{
     display: flex;
+    flex-direction: column;
     align-items: center;
 }
 
